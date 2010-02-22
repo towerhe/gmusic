@@ -1,0 +1,7 @@
+=== 0.1.0 / 2010-02-22
+
+* Feature #56: parse the downloading related information of the song
+* Feature #57: parse the lyrics of the song
+* Feature #58: parse the search result
+* Feature #59: provide a search API
+
