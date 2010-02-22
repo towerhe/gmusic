@@ -7,3 +7,8 @@ require 'spec/autorun'
 Spec::Runner.configure do |config|
   
 end
+
+def path_of(file)
+  File.join(File.dirname(__FILE__), file)
+end
+

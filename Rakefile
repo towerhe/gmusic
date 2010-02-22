@@ -5,13 +5,15 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "gmusic"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = %Q{Search songs from http://music.g.cn}
+    gem.description = %Q{gmusic provides APIs to search songs from http://music.g.cn. There are three query conditions supported by gmusic, which are title, artist and album of a song. gmusic delivers query requests to Google and collects the search result returned from Google. }
     gem.email = "towerhe@gmail.com"
     gem.homepage = "http://github.com/towerhe/gmusic"
     gem.authors = ["Tower He"]
+    gem.add_dependency "hpricot", ">=0.8.2"
     gem.add_development_dependency "rspec", ">= 1.2.9"
-    # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
+
+    gem.files = FileList['lib/**/*.rb', 'spec/**/*.rb', '[A-Z]*'].to_a
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError

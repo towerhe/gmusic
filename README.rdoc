@@ -1,17 +1,28 @@
-= gmusic
+= GMusic
 
-Description goes here.
+GMusic provides APIs to search songs from http://music.g.cn. There are three query conditions supported by GMusic, which are title, artist and album of a song. GMusic delivers query requests to Google and collects the search result returned from Google. 
 
-== Note on Patches/Pull Requests
- 
-* Fork the project.
-* Make your feature addition or bug fix.
-* Add tests for it. This is important so I don't break it in a
-  future version unintentionally.
-* Commit, do not mess with rakefile, version, or history.
-  (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
-* Send me a pull request. Bonus points for topic branches.
+== SYNOPSIS:
 
-== Copyright
+  require 'gmusic'
+
+  result = GMusic.search(:title => 'heal the world', :artist => 'michael jackson')
+
+  puts result.class
+  # => Array 
+  
+  result.first.keys
+  # => [:artist, :album, :format, :size, :url, :id, :lyrics, :title]
+
+== REQUIREMENTS:
+
+* jeweler (1.4.0) http://technicalpickles.github.com/jeweler
+* hpricot (0.8.2) http://github.com/whymirror/hpricot
+
+== INSTALL:
+
+  gem install gmusic
+
+== COPYRIGHT:
 
 Copyright (c) 2010 Tower He. See LICENSE for details.
