@@ -4,7 +4,7 @@ module GMusic
       def parse url
         songs = []
         doc = Hpricot(open(url))
-        (doc/'#song_list > tr').each do |tr|
+        (doc/'#song_list > tbody > tr').each do |tr|
           begin
             song = {}
             id = tr.attributes["id"].gsub(/row/, '')

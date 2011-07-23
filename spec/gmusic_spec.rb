@@ -27,17 +27,17 @@ describe "Gmusic" do
     songs.size.should == 1
   end
 
-  it "should return 5 full matched items" do
+  it "should return 6 full matched items" do
     parsed = GMusic::SongListParser.parse path_of('g-search-thankyou.html')
     dowload_info = GMusic::DownloadInfoParser.parse path_of('g-download.html')
     lyrics = GMusic::LyricsParser.parse path_of('g-lyrics.html')
     
     GMusic::SongListParser.should_receive(:parse).and_return(parsed)
-    GMusic::DownloadInfoParser.should_receive(:parse).exactly(5).times.and_return(dowload_info)
-    GMusic::LyricsParser.should_receive(:parse).exactly(5).times.and_return(lyrics)
+    GMusic::DownloadInfoParser.should_receive(:parse).exactly(6).times.and_return(dowload_info)
+    GMusic::LyricsParser.should_receive(:parse).exactly(6).times.and_return(lyrics)
 
     songs = GMusic.search(:title => 'thank you', :artist => 'dido')
     
-    songs.size.should == 5 
+    songs.size.should == 6 
   end
 end
