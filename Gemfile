@@ -1,6 +1,11 @@
 source 'http://rubygems.org'
 
-gem 'jeweler'
-gem 'rspec'
-
 gem 'hpricot'
+
+group :development do
+  gem 'jeweler'
+end
+
+group :test do
+  gem 'rspec'
+end
