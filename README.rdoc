@@ -1,6 +1,6 @@
 = GMusic
 
-GMusic provides a serias of APIs to search songs from http://music.g.cn. Title, aritist and album are supported now.
+GMusic provides a serias of APIs to search songs from http://music.g.cn. Title and aritist are supported now.
 
 == SYNOPSIS:
 
@@ -16,8 +16,8 @@ GMusic provides a serias of APIs to search songs from http://music.g.cn. Title, 
 
 == REQUIREMENTS:
 
-* jeweler (1.4.0) http://technicalpickles.github.com/jeweler
-* hpricot (0.8.2) http://github.com/whymirror/hpricot
+* jeweler http://technicalpickles.github.com/jeweler
+* hpricot http://github.com/whymirror/hpricot
 
 == INSTALL:
 

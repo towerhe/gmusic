@@ -1,3 +1,12 @@
+=== 0.2.1 / 2011-07-23
+
+* song_list return by google has a tbody now
+
+=== 0.2.0 / 2011-07-23
+
+* use bundler to manage gems
+* update to rspec 2
+
 === 0.1.0 / 2010-02-22
 
 * Feature #56: parse the downloading related information of the song
