@@ -1,6 +1,6 @@
 = GMusic
 
-GMusic provides APIs to search songs from http://music.g.cn. There are three query conditions supported by GMusic, which are title, artist and album of a song. GMusic delivers query requests to Google and collects the search result returned from Google. 
+GMusic provides a serias of APIs to search songs from http://music.g.cn. Title, aritist and album are supported now.
 
 == SYNOPSIS:
 
