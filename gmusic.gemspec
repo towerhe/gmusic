@@ -5,11 +5,11 @@ require "gmusic/version"
 Gem::Specification.new do |s|
   s.name        = "gmusic"
   s.version     = Gmusic::VERSION
-  s.authors     = ["Jeweller-Tsai"]
-  s.email       = ["jiangnan34@gmail.com"]
+  s.authors     = ["towerhe", "Jeweller-Tsai"]
+  s.email       = ["towerhe@gmail.com", "jiangnan34@gmail.com"]
   s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.summary     = %q{Gmusic is a CLI app to interact with music.g.cn}
+  s.description = %q{Gmusic provides a CLI and a series of APIs to interact wiht music.g.cn}
 
   s.rubyforge_project = "gmusic"
 
@@ -19,6 +19,13 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   # specify any dependencies here; for example:
-  # s.add_development_dependency "rspec"
-  # s.add_runtime_dependency "rest-client"
+  s.add_runtime_dependency "thor"
+  s.add_runtime_dependency "command_line_reporter"
+  s.add_runtime_dependency "mechanize"
+  s.add_development_dependency "rspec"
+  s.add_development_dependency "cucumber"
+  s.add_development_dependency "aruba"
+  s.add_development_dependency "pry"
+  s.add_development_dependency "plymouth"
+  s.add_development_dependency "fakeweb"
 end
