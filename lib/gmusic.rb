@@ -1,5 +1,9 @@
-require "gmusic/version"
+require 'gmusic/search_agent'
 
 module Gmusic
-  # Your code goes here...
+
+  class SearchError < StandardError; end
+  class InvalidParameter < SearchError; end
+  class NotFound < SearchError; end
+
 end
