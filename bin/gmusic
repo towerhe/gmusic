@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+require 'gmusic/cli'
+
+Gmusic::CLI.start
