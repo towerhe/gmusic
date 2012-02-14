@@ -1,5 +1,6 @@
 # encoding: UTF-8
 require 'gmusic/search/result'
+require 'gmusic/search/errors'
 require 'mechanize'
 
 module Gmusic
