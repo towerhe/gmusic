@@ -1,8 +1,8 @@
 # encoding: UTF-8
 describe Gmusic::Search::Agent do
   let(:base_url) { %Q{http://www.google.cn/music/search?q} }
-  let(:found_url) { base_url + 'bad%20romance%20lady%20gaga' }
-  let(:not_found_url) { base_url + 'not%20found' }
+  let(:found_url) { base_url + 'bad+romance+lady+gaga' }
+  let(:not_found_url) { base_url + 'not+found' }
 
   describe '.search' do
     before(:each) do
@@ -66,15 +66,15 @@ describe Gmusic::Search::Agent do
     end
 
     describe '.format' do
-      it 'replaces blank space to %20' do
-        Gmusic::Search::Agent.send(:format, ' word1  word2   ').should eq 'word1%20word2'
+      it 'replaces blank space to +' do
+        Gmusic::Search::Agent.send(:format, ' word1  word2   ').should eq 'word1+word2'
       end
     end
 
     describe '.format_url' do
       it 'formats the base url with the given hash' do
         hash = { title: 'bad romance', artist: 'Lady Gaga', album: 'The Fame Monster', lyric: 'GaGa oh la la'}
-        url = "#{base_url}bad%20romance%20lady%20gaga%20the%20fame%20monster%20gaga%20oh%20la%20la"
+        url = "#{base_url}bad+romance+lady+gaga+the+fame+monster+gaga+oh+la+la"
 
         Gmusic::Search::Agent.send(:format_url, base_url, hash).should eq url
       end
