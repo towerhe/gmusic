@@ -51,22 +51,19 @@ module Gmusic
         end
 
         def query_valid?(hash)
-          not hash.empty?
-        end
-
-        def not_found?(hash)
-          hash.each_value do |v|
-            return false if v != 0
-          end
+          return false if hash.empty?
+          hash.each_key { |key| return false unless SEARCH_OPTSTIONS.include?(key.to_sym) }
 
           true
         end
 
-        def format_url(base_url, hash)
-          key_words = SEARCH_OPTSTIONS.map { |key| hash[key] }
-          query = encode_www_form(key_words)
+        def not_found?(hash)
+          hash.each_value { |v| return false if v != 0 }
+          true
+        end
 
-          base_url + query
+        def format_url(base_url, hash)
+          base_url + encode_www_form(hash.values)
         end
 
         def encode_www_form(ary)
