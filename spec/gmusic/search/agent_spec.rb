@@ -67,7 +67,7 @@ describe Gmusic::Search::Agent do
 
     describe '.format' do
       it 'replaces blank space to +' do
-        Gmusic::Search::Agent.send(:format, ' word1  word2   ').should eq 'word1+word2'
+        Gmusic::Search::Agent.send(:encode_www_form, [' word1  ','  word2']).should eq 'word1+word2'
       end
     end
 

@@ -2,7 +2,6 @@
 require 'gmusic/search/result'
 require 'gmusic/search/errors'
 require 'mechanize'
-require 'uri'
 
 module Gmusic
   module Search
@@ -64,19 +63,15 @@ module Gmusic
         end
 
         def format_url(base_url, hash)
-          key_words = ''
-          SEARCH_OPTSTIONS.each do |opt|
-            key_words += "#{hash[opt]} "
-          end
+          key_words = SEARCH_OPTSTIONS.map { |key| hash[key] }
+          query = encode_www_form(key_words)
 
-          format(base_url + key_words)
-          #binding.pry
-          #query = URI.encode_www_form(['q', key_words])
-          #base_url % query
+          base_url + query
         end
 
-        def format(str)
-          str.downcase.gsub(/^\s+|\s+$/, '').gsub(/\s+/, '+')
+        def encode_www_form(ary)
+          str = ary * ' '
+          str.downcase.strip.squeeze(' ').gsub(/\s+/, '+')
         end
       end
     end
