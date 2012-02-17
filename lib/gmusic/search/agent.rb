@@ -15,21 +15,33 @@ module Gmusic
           query_url = format_url(SEARCH_URL, query)
           page = agent.get(query_url)
           info = extract_info_from page
-          links = collect_links_from page
+          #links = collect_links_from page
+          details = collect_details_from page
 
-          Result.new(info, links)
+          Result.new(info, details)
         end
 
         private
-        def collect_links_from(page)
+        def collect_details_from(page)
           page.search('#song_list tbody').map do |tbody|
             id = tbody.attributes['id'].text
             title = extract_text_from(tbody, '.Title b')
+            artist = extract_text_from(tbody, '.Artist a')
             link = DOWNLOAD_URL % id
-
-            { title: title, link: link }
+            { title: title, artist: artist, link: link }
           end
         end
+
+        #def collect_links_from(page)
+          #page.search('#song_list tbody').map do |tbody|
+            #id = tbody.attributes['id'].text
+            #title = extract_text_from(tbody, '.Title b')
+            #url = DOWNLOAD_URL % id
+
+            ##{ title: title, link: link }
+            #Link.new(title, url)
+          #end
+        #end
 
         def extract_info_from(page)
           text = extract_text_from(page, '.topheadline')
