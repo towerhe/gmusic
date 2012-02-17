@@ -1,11 +1,12 @@
 module Gmusic
   module Search
     class Result
-      attr_reader :info, :links
+      attr_reader :info, :details
 
-      def initialize(info, links)
+      def initialize(info, details)
         @info = info
-        @links = links
+        #@links = links
+        @details = details
       end
     end
   end

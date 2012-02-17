@@ -23,7 +23,7 @@ describe Gmusic::Search::Agent do
     let(:agent) { Gmusic::Search::Agent.send(:agent) }
 
     describe '.extract_info_from' do
-      describe 'when not found' do
+      context 'when not found' do
         before(:each) do
           prepare_fake_web('not_found.html', not_found_url)
           @page = agent.get not_found_url
@@ -36,7 +36,7 @@ describe Gmusic::Search::Agent do
         end
       end
 
-      describe 'when found' do
+      context 'when found' do
         before(:each) do
           prepare_fake_web('search_results.html', found_url)
           @page = agent.get found_url
@@ -51,17 +51,35 @@ describe Gmusic::Search::Agent do
       end
     end
 
-    describe '.collect_links_from' do
+    #describe '.collect_links_from' do
+      #before(:each) do
+        #prepare_fake_web('search_results.html', found_url)
+        #@page = agent.get found_url
+      #end
+
+      #subject { Gmusic::Search::Agent.send(:collect_links_from, @page) }
+
+      #it 'returns an array of links' do
+        #should be_an Array
+      #end
+      #its(:first) { should be_a Gmusic::Link }
+      #it { should have_at_least(1).item }
+    #end
+
+    describe '.collect_details_from' do
       before(:each) do
         prepare_fake_web('search_results.html', found_url)
         @page = agent.get found_url
       end
 
-      subject { Gmusic::Search::Agent.send(:collect_links_from, @page) }
+      subject { Gmusic::Search::Agent.send(:collect_details_from, @page) }
 
-      it { should be_an Array }
+      it 'returns an array of links' do
+        should be_an Array
+      end
       its(:first) { should be_a Hash }
       its(:first) { should have_key :title }
+      its(:first) { should have_key :artist }
       its(:first) { should have_key :link }
     end
 
