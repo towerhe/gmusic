@@ -19,16 +19,12 @@ module Gmusic
       header('搜索中...')
       table border: true do
         row color: 'red', bold: true do
-          column '歌名', width: 20, padding: 2
-          column '歌手', width: 20, padding: 2
-          column '链接', width: 45, padding: 2
+          {'歌名' => 20, '歌手' => 20, '链接' => 45}.each { |k, v| column k, width: v, padding: 2 }
         end
 
         array.each do |song|
           row color: 'green' do
-            column song.title
-            column song.artist
-            column song.link
+            [:title, :artist, :link].each { |method| column song.send(method) }
           end
         end
       end
