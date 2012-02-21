@@ -35,10 +35,12 @@ describe Gmusic::Song do
 
   describe '.new' do
     let(:valid_attrs) { {title: 'valid title', artist: 'lady gaga', link: 'http://ladygaga.com'} }
-    
+
     context 'with invalid attributes' do
       it 'raise InvalidAttributesError when attrs not contains title, artist and link' do
-        expect { Gmusic::Song.new({}) }.to raise_error(Gmusic::InvalidAttributesError, 'only title, artist and link is allowed')
+        expect do
+          Gmusic::Song.new({})
+        end.to raise_error(Gmusic::InvalidAttributesError, 'only title, artist and link is allowed')
       end
       it 'raise InvalidAttributesError when attrs contains more than title, artist and link' do
         expect do

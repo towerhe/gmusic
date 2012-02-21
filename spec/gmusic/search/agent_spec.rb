@@ -91,7 +91,12 @@ describe Gmusic::Search::Agent do
 
     describe '.format_url' do
       it 'formats the base url with the given hash' do
-        hash = { title: 'bad romance', artist: 'Lady Gaga', album: 'The Fame Monster', lyric: 'GaGa oh la la'}
+        hash = {
+          title: 'bad romance',
+          artist: 'Lady Gaga',
+          album: 'The Fame Monster',
+          lyric: 'GaGa oh la la'
+        }
         url = "#{base_url}bad+romance+lady+gaga+the+fame+monster+gaga+oh+la+la"
 
         Gmusic::Search::Agent.send(:format_url, base_url, hash).should eq url
