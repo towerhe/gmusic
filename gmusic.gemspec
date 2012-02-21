@@ -28,4 +28,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "pry"
   s.add_development_dependency "plymouth"
   s.add_development_dependency "fakeweb"
+  s.add_development_dependency "cane"
 end
