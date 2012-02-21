@@ -1,6 +1,8 @@
 describe Gmusic::Song do
+
+  let(:base_url) { %Q{http://www.google.cn/music/search?q=} }
+
   describe '.search_by_title' do
-    let(:base_url) { %Q{http://www.google.cn/music/search?q=} }
 
     context 'when nothing found' do
       before(:each) do
@@ -30,6 +32,34 @@ describe Gmusic::Song do
       it 'returns relative songs' do
         subject.each { |song| song.title.should match /bad|romance/i }
       end
+    end
+  end
+
+  describe '.download' do
+    #before(:each) do
+      #found_url = base_url + 'bad+romance'
+      #prepare_fake_web('search_results.html', found_url)
+    #end
+
+    let(:title) { 'bad romance' }
+    subject { Gmusic::Song.download(title) }
+
+    context 'when not found' do
+      it 'returns false' do
+        Gmusic::Song.should_receive(:search_by_title).with(title).and_return([])
+
+        Gmusic::Song.download(title).should eq false
+      end
+    end
+
+    context "when found" do
+      before(:each) do
+        songs = [Gmusic::Song.new(title: title, artist: 'lady gaga', link: 'http://ladygaga.com/bad-romance.mp3')]
+        Gmusic::Song.should_receive(:search_by_title).with(title).and_return(songs)
+        songs.first.should_receive(:save).and_return(true)
+      end
+
+      it { should be true }
     end
   end
 

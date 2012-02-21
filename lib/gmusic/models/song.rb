@@ -12,6 +12,10 @@ module Gmusic
       @link = attrs[:link]
     end
 
+    def save(dir = nil)
+      Search::Agent.download(dir)
+    end
+
     class << self
       def search_by_title(title)
         begin
@@ -21,6 +25,13 @@ module Gmusic
         end
 
         collect_songs(result)
+      end
+
+      def download(title, dir = nil)
+        songs = search_by_title(title)
+        return false if songs.empty?
+
+        songs.first.save(dir)
       end
 
       private
