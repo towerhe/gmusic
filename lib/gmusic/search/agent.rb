@@ -8,17 +8,35 @@ module Gmusic
     class Agent
 
       class << self
-        #TODO not finish
+        #NOTE not finish
         def search(query)
           raise InvalidParameter unless query_valid?(query)
 
           query_url = format_url(SEARCH_URL, query)
+
+          #TODO should wrapped in begin rescue pair
+          # retry or raise, make it more robust
           page = agent.get(query_url)
+
           info = extract_info_from page
-          #links = collect_links_from page
           details = collect_details_from page
 
           Result.new(info, details)
+        end
+
+        #NOTE not finish
+        def download(song, dir=nil)
+          #TODO
+          #`get` should be rescue too
+          #maybe pass a song list and then can retry 3 times
+          agent.get(song.link) do |page|
+            begin
+              file = page.links.last.click
+            rescue Errno::ETIMEDOUT => e
+              #do_something
+            end
+            file.save(dir || "#{Dir.home}/Downloads/gmusic/")
+          end
         end
 
         private
@@ -27,7 +45,11 @@ module Gmusic
             id = tbody.attributes['id'].text
             title = extract_text_from(tbody, '.Title b')
             artist = extract_text_from(tbody, '.Artist a')
+
+            #TODO
+            #make link as an URI object may be better, more OO anyway
             link = DOWNLOAD_URL % id
+
             { title: title, artist: artist, link: link }
           end
         end
@@ -58,8 +80,11 @@ module Gmusic
           scope.search(element).text
         end
 
+        #TODO
+        #set a logger for the agent
+        #http://mechanize.rubyforge.org/Mechanize.html
         def agent
-          Mechanize.new
+          @agent ||= Mechanize.new
         end
 
         def query_valid?(hash)
