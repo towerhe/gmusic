@@ -1,6 +1,7 @@
 # encoding: UTF-8
 require 'gmusic/search/result'
 require 'gmusic/search/errors'
+require 'fileutils'
 require 'mechanize'
 
 module Gmusic
@@ -35,11 +36,29 @@ module Gmusic
             rescue Errno::ETIMEDOUT => e
               #do_something
             end
-            file.save(dir || "#{Dir.home}/Downloads/gmusic/")
+            file.save("#{mkdir dir}/#{song.title}.mp3")
           end
         end
 
         private
+
+        def mkdir(dirname)
+          return FileUtils.mkdir_p("#{Dir.home}/Downloads/gmusic").first unless dirname
+          return dirname if Dir.exists? dirname
+
+          dir = sanitize_dirname dirname
+          return FileUtils.mkdir_p(dir).first if /\/.*/.match dir
+
+          FileUtils.mkdir_p(File.join(Dir.pwd, dir)).first
+        end
+
+        def sanitize_dirname(dirname)
+          dirname.strip.tap do |dir|
+            dir.sub!(/^\~/, Dir.home)
+            dir.gsub!(/[^\.|^\/|^[:word:]]/, '_')
+          end
+        end
+
         def collect_details_from(page)
           page.search('#song_list tbody').map do |tbody|
             id = tbody.attributes['id'].text

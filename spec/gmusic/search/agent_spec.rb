@@ -19,6 +19,10 @@ describe Gmusic::Search::Agent do
     its(:info) { should eq({"歌曲"=>12, "专辑"=>7, "歌手"=>0}) }
   end
 
+  describe '.download' do
+    
+  end
+
   describe 'private class methods' do
     let(:agent) { Gmusic::Search::Agent.send(:agent) }
 
@@ -102,5 +106,69 @@ describe Gmusic::Search::Agent do
         Gmusic::Search::Agent.send(:format_url, base_url, hash).should eq url
       end
     end
+
+    describe '.sanitize_dirname' do
+      let(:shorten_dir) { '~/Desktop' }
+      let(:invalid_dir) { ' (invalid)*/&dir@   ' }
+
+      it "replace '~' to user's home directory" do
+        Gmusic::Search::Agent.send(:sanitize_dirname, shorten_dir).should eq "#{Dir.home}/Desktop"
+      end
+
+      it "sanitizes directory name by replacing invalid charactor to '_'" do
+        Gmusic::Search::Agent.send(:sanitize_dirname, invalid_dir).should eq '_invalid__/_dir_'
+      end
+    end
+
+    describe '.mkdir' do
+      context 'when the given arg is nil' do
+        let(:path) { nil }
+        subject { Gmusic::Search::Agent.send(:mkdir, path) }
+
+        it 'makes ~/Downloads/gmusic' do
+          dir_exist?("#{Dir.home}/Downloads/gmusic").should be
+        end
+
+        it "returns dirname" do
+          subject.should eq "#{Dir.home}/Downloads/gmusic"
+        end
+      end
+
+      context 'when dir exists' do
+        let(:path) { path = Dir.pwd }
+        subject { Gmusic::Search::Agent.send(:mkdir, path) }
+
+        it 'returns dirname' do
+          subject.should eq path
+        end
+      end
+
+      context 'when given absolute path' do
+        let(:path) { "#{Dir.pwd}/for_test" }
+        subject { Gmusic::Search::Agent.send(:mkdir, path) }
+
+        it 'makes dir' do
+          dir_exist?(path).should be
+        end
+
+        it 'returns dirname' do
+          subject.should eq path
+        end
+      end
+
+      context 'when given relative path' do
+        let(:path) { './for_test' }
+        subject { Gmusic::Search::Agent.send(:mkdir, path) }
+
+        it 'makes dir' do
+          dir_exist?(path).should be
+        end
+
+        it 'returns dirname' do
+          subject.should eq path
+        end
+      end
+    end
+
   end
 end
