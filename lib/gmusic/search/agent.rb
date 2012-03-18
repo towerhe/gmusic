@@ -30,14 +30,20 @@ module Gmusic
           #TODO
           #`get` should be rescue too
           #maybe pass a song list and then can retry 3 times
+          agent.pluggable_parser.default = Mechanize::Download
           agent.get(song.link) do |page|
+            times = 0
             begin
               file = page.links.last.click
             rescue Errno::ETIMEDOUT => e
-              #do_something
+              return false if times > 2
+              times += 1
+              retry
             end
             file.save("#{mkdir dir}/#{song.title}.mp3")
           end
+
+          true
         end
 
         private
