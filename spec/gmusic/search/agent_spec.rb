@@ -19,8 +19,40 @@ describe Gmusic::Search::Agent do
     its(:info) { should eq({"歌曲"=>12, "专辑"=>7, "歌手"=>0}) }
   end
 
+  #NOTE not finish
   describe '.download' do
-    
+    before(:each) do
+      @song = Gmusic::Song.new(title: 'for_test', artist: 'nobody', link: 'http://fakelink/')
+      prepare_fake_web('download.html', 'http://fakelink/')
+      prepare_fake_web('for_test.mp3', "file:///home/jeweller/workspaces/gmusic/spec/web_pages/for_test.mp3")
+    end
+    after(:all) { clean_up_files_generated_by_fakeweb }
+
+    context "without specifying a directory" do
+      let(:default_path) { File.join(Dir.home, 'Downloads', 'gmusic') }
+
+      before(:each) { Gmusic::Search::Agent.download(@song) }
+      after(:each) { FileUtils.rm_rf default_path }
+
+      it "downloads the song and stored it in ~/Downloads/gmusic" do
+        Dir.exists?(default_path).should be
+      end
+
+      it { File.exists?(File.join(default_path, 'for_test.mp3')).should be }
+    end
+
+    context "specified a directory" do
+      let(:store_path) { File.join(Dir.home, 'Desktop', 'gmusic') }
+
+      before(:each) { Gmusic::Search::Agent.download(@song, store_path) }
+      after(:all) { FileUtils.rm_rf store_path }
+
+      it 'downloads ths song and stored it the given directory' do
+        Dir.exists?(store_path).should be
+      end
+
+      it { File.exists?(File.join(store_path, 'for_test.mp3')).should be }
+    end
   end
 
   describe 'private class methods' do
@@ -126,6 +158,7 @@ describe Gmusic::Search::Agent do
         subject { Gmusic::Search::Agent.send(:mkdir, path) }
 
         it 'makes ~/Downloads/gmusic' do
+          subject
           dir_exist?("#{Dir.home}/Downloads/gmusic").should be
         end
 
