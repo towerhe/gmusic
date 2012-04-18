@@ -13,13 +13,13 @@ module Gmusic
     end
 
     def save(dir = nil)
-      Search::Agent.download(dir)
+      Search::Engine.instance.download(self, dir)
     end
 
     class << self
       def search_by_title(title)
         begin
-          result = Search::Agent.search(title: title) unless title.empty?
+          result = Search::Engine.instance.search(title: title) unless title.empty?
         rescue Search::NotFound
           return []
         end
