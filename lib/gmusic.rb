@@ -6,7 +6,7 @@ module Gmusic
   autoload :SongReporter, 'gmusic/reporters/song_reporter'
 
   module Search
-    autoload :Agent, 'gmusic/search/agent'
+    autoload :Engine, 'gmusic/search/engine'
 
     SEARCH_URL = %Q{http://www.google.cn/music/search?q=}
     DOWNLOAD_URL = %Q(http://www.google.cn/music/top100/musicdownload?id=%s)
