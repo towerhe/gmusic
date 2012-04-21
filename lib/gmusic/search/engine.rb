@@ -3,6 +3,7 @@ require 'gmusic/search/result'
 require 'gmusic/search/errors'
 require 'fileutils'
 require 'mechanize'
+require 'singleton'
 
 module Gmusic
   module Search
@@ -116,10 +117,7 @@ module Gmusic
       end
 
       def query_valid?(hash)
-        return false if hash.empty?
-        hash.each_key { |key| return false unless SEARCH_OPTSTIONS.include?(key.to_sym) }
-
-        true
+        hash.all? { |k, v| SEARCH_OPTSTIONS.include? k.to_sym }
       end
 
       def not_found?(hash)
