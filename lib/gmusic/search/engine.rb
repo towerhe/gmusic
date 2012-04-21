@@ -121,8 +121,7 @@ module Gmusic
       end
 
       def not_found?(hash)
-        hash.each_value { |v| return false if v != 0 }
-        true
+        hash.all? { |k, v| v == 0 }
       end
 
       def format_url(base_url, hash)
