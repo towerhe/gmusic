@@ -14,6 +14,7 @@ module Gmusic
 
     class Agent
       extend AsyncRequest
+      DEFAULT_DIRECTORY = File.expand_path '~/Downloads'
 
       class << self
         def download(*songs)
@@ -28,7 +29,7 @@ module Gmusic
         private
 
         def save(filename, content)
-          fname = File.join(Gmusic::DEFAULT_DIRECTORY, filename + '.mp3')
+          fname = File.join(DEFAULT_DIRECTORY, filename + '.mp3')
           File.open(fname, 'w+') do |f|
             begin
               f.write content
