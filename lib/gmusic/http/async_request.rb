@@ -5,14 +5,14 @@ require 'em-synchrony/em-http'
 module Gmusic
   module AsyncRequest
 
-    def multi_async_get(urls, concurrency = 3, &block)
+    def multi_async_get(urls, concurrency = 3)
       results = {}
 
       EM.synchrony do
         EM::Synchrony::Iterator.new(urls, concurrency).each do |url, iter|
           http = EventMachine::HttpRequest.new(url).aget
           http.callback do
-            result = block.call(http.response)
+            result = block_given? ? yield(http.response) : http.response
             results.merge!(url.hash => result)
             iter.next
           end

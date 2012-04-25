@@ -3,9 +3,10 @@ module Gmusic
   autoload :Artist, 'gmusic/models/artist'
   autoload :Album, 'gmusic/models/album'
   autoload :Link, 'gmusic/models/link'
-  autoload :CLIReporter, 'gmusic/reporters/cli_reporter'
-  autoload :SongReporter, 'gmusic/reporters/song_reporter'
-  autoload :AlbumReporter, 'gmusic/reporters/album_reporter'
+  autoload :CLI, 'gmusic/cli/cli'
+  #autoload :CLIReporter, 'gmusic/reporters/cli_reporter'
+  #autoload :SongReporter, 'gmusic/reporters/song_reporter'
+  #autoload :AlbumReporter, 'gmusic/reporters/album_reporter'
   autoload :Download, 'gmusic/download/agent'
   autoload :AsyncRequest, 'gmusic/http/async_request'
 

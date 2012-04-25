@@ -1,12 +1,8 @@
 # encoding: UTF-8
-#require 'gmusic/search/result'
 require 'gmusic/search/errors'
 require 'fileutils'
 require 'mechanize'
 require 'singleton'
-require 'em-synchrony'
-require 'em-synchrony/em-http'
-#require 'gmusic/http/async_request'
 
 module Gmusic
   module Search
