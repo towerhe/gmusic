@@ -1,14 +1,18 @@
 # encoding: UTF-8
-require 'gmusic/search/result'
+#require 'gmusic/search/result'
 require 'gmusic/search/errors'
 require 'fileutils'
 require 'mechanize'
 require 'singleton'
+require 'em-synchrony'
+require 'em-synchrony/em-http'
+#require 'gmusic/http/async_request'
 
 module Gmusic
   module Search
     class Engine < Mechanize
       include Singleton
+      include AsyncRequest
 
       #NOTE not finish
       def search(query)
@@ -26,13 +30,31 @@ module Gmusic
         Result.new(info, details)
       end
 
+      def search_album(query)
+        url = format_album_url(SEARCH_URL, query)
+        page = agent.get(url)
+        albums = collect_albums_from page
+        urls = albums.map(&:url)
+
+        songs_in_albums = multi_async_get(urls) do |res|
+          page = Nokogiri::HTML res
+          details = collect_details_from page
+          details.map {|detail| Song.new detail }
+        end
+
+        albums.each do |a|
+          key = a.url.hash
+          a.songs = songs_in_albums[key]
+        end
+      end
+
       #NOTE not finish
       def download(song, dir=nil)
         #TODO
         #`get` should be rescue too
         #maybe pass a song list and then can retry 3 times
         agent.pluggable_parser.default = Mechanize::Download
-        agent.get(song.link) do |page|
+        agent.get(song.url) do |page|
           times = 0
           begin
             file = page.links.last.click
@@ -48,6 +70,32 @@ module Gmusic
       end
 
       private
+
+      def collect_albums_from(page)
+        names = collect_names_from page
+        links = page.search('.Title a:first')
+
+        links.map.with_index do |link, i|
+          id = extract_album_id link.attributes['href'].value
+          Album.new.tap do |a|
+            a.artist = names[i]
+            a.url = url = ALBUM_URL + id
+            a.title = extract_album_title link.text
+          end
+        end
+      end
+
+      def collect_names_from(page)
+        page.search('.AlbumInfo .Tracks').map {|node| /(.+)\d{4}年/.match(node.text)[1] }
+      end
+
+      def extract_album_title(str)
+        /《(.+)》/.match(str)[1].strip
+      end
+
+      def extract_album_id(str)
+        /%3D(\p{XDigit}+)&/.match(str)[1]
+      end
 
       def mkdir(dirname)
         return FileUtils.mkdir_p("#{Dir.home}/Downloads/gmusic").first unless dirname
@@ -69,14 +117,15 @@ module Gmusic
       def collect_details_from(page)
         page.search('#song_list tbody').map do |tbody|
           id = tbody.attributes['id'].text
-          title = extract_text_from(tbody, '.Title b')
+          #NOTE change b to a
+          title = extract_text_from(tbody, '.Title a')
           artist = extract_text_from(tbody, '.Artist a')
 
           #TODO
           #make link as an URI object may be better, more OO anyway
-          link = DOWNLOAD_URL % id
+          url = DOWNLOAD_URL % id
 
-          { title: title, artist: artist, link: link }
+          { title: title, artist: artist, url: url }
         end
       end
 
@@ -110,7 +159,7 @@ module Gmusic
       #set a logger for the agent
       #http://mechanize.rubyforge.org/Mechanize.html
       #def agent
-        #@agent ||= Mechanize.new
+      #@agent ||= Mechanize.new
       #end
       def agent
         self.class.instance
@@ -126,6 +175,10 @@ module Gmusic
 
       def format_url(base_url, hash)
         base_url + encode_www_form(hash.values)
+      end
+
+      def format_album_url(base_url, hash)
+        format_url(base_url, hash) + '&cat=album'
       end
 
       def encode_www_form(ary)
