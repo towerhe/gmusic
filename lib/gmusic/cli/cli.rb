@@ -64,7 +64,6 @@ module Gmusic
       reporter.list songs
 
       ids = ask_for_numbers songs.size
-      #TODO download songs, refactor it later
       songs = ids.map {|i| songs[i-1] }
 
       Download::Agent.download(songs)
