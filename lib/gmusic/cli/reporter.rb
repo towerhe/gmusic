@@ -1,7 +1,7 @@
 require 'command_line_reporter'
 
 module Gmusic
-  module CLIReporter
+  class Reporter
     include CommandLineReporter
 
     attr_accessor :subject
@@ -31,6 +31,14 @@ module Gmusic
             thead.each_key { |method| column item.send(method) }
           end
         end
+      end
+    end
+
+    def self.decorate(&block)
+      new.tap do |r|
+        r.header 'Searching'
+        r.subject = block.call
+        r.list r.subject
       end
     end
 

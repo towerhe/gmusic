@@ -1,5 +1,6 @@
 require 'thor'
-require 'gmusic'
+require 'gmusic/cli/reporter'
+#require 'gmusic'
 
 module Gmusic
   class CLI < Thor
@@ -53,7 +54,7 @@ module Gmusic
     end
 
     def search_album(title)
-      reporter = AlbumReporter.decorate do
+      reporter = Reporter.decorate do
         Album.search(title: title)
       end
 
@@ -70,7 +71,7 @@ module Gmusic
     end
 
     def search_song(title)
-      reporter = SongReporter.decorate do
+      reporter = Reporter.decorate do
         Song.search_by_title(title)
       end
 
