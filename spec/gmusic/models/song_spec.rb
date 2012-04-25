@@ -54,7 +54,7 @@ describe Gmusic::Song do
 
     context "when found" do
       before(:each) do
-        songs = [Gmusic::Song.new(title: title, artist: 'lady gaga', link: 'http://ladygaga.com/bad-romance.mp3')]
+        songs = [Gmusic::Song.new(title: title, artist: 'lady gaga', url: 'http://ladygaga.com/bad-romance.mp3')]
         Gmusic::Song.should_receive(:search_by_title).with(title).and_return(songs)
         songs.first.should_receive(:save).and_return(true)
       end
@@ -64,22 +64,22 @@ describe Gmusic::Song do
   end
 
   describe '.new' do
-    let(:valid_attrs) { {title: 'valid title', artist: 'lady gaga', link: 'http://ladygaga.com'} }
+    let(:valid_attrs) { {title: 'valid title', artist: 'lady gaga', url: 'http://ladygaga.com'} }
 
     context 'with invalid attributes' do
-      it 'raise InvalidAttributesError when attrs not contains title, artist and link' do
+      it 'raise InvalidAttributesError when attrs not contains title, artist and url' do
         expect do
           Gmusic::Song.new({})
-        end.to raise_error(Gmusic::InvalidAttributesError, 'only title, artist and link is allowed')
+        end.to raise_error(Gmusic::InvalidAttributesError, 'only title, artist and url is allowed')
       end
-      it 'raise InvalidAttributesError when attrs contains more than title, artist and link' do
+      it 'raise InvalidAttributesError when attrs contains more than title, artist and url' do
         expect do
           Gmusic::Song.new(valid_attrs.merge({invalid: ''}))
-        end.to raise_error(Gmusic::InvalidAttributesError, 'only title, artist and link is allowed')
+        end.to raise_error(Gmusic::InvalidAttributesError, 'only title, artist and url is allowed')
       end
     end
     context "with valid attributes" do
-      it 'initialize a new song when attrs only contains title, atrist and link' do
+      it 'initialize a new song when attrs only contains title, atrist and url' do
         expect { Gmusic::Song.new(valid_attrs) }.not_to raise_error
       end
     end
