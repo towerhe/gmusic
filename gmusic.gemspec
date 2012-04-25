@@ -22,6 +22,10 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "thor"
   s.add_runtime_dependency "command_line_reporter"
   s.add_runtime_dependency "mechanize"
+  s.add_runtime_dependency "em-http-request"
+  s.add_runtime_dependency "em-synchrony"
+  s.add_runtime_dependency "confstruct"
+
   s.add_development_dependency "rspec"
   s.add_development_dependency "cucumber"
   s.add_development_dependency "aruba"
