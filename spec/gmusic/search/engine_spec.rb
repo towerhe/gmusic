@@ -24,7 +24,7 @@ describe Gmusic::Search::Engine do
   #NOTE not finish
   describe '#download' do
     before(:each) do
-      @song = Gmusic::Song.new(title: 'for_test', artist: 'nobody', link: 'http://fakelink/')
+      @song = Gmusic::Song.new(title: 'for_test', artist: 'nobody', url: 'http://fakelink/')
       prepare_fake_web('download.html', 'http://fakelink/')
       prepare_fake_web('for_test.mp3', "file:///home/jeweller/workspaces/gmusic/spec/web_pages/for_test.mp3")
     end
@@ -118,7 +118,7 @@ describe Gmusic::Search::Engine do
       it 'returns an array of links' do
         @details.should be_an Array
       end
-      [:title, :artist, :link].each do |key|
+      [:title, :artist, :url].each do |key|
         it "details should have key #{key}" do
           @details.first.should have_key key
         end
