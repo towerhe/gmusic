@@ -24,10 +24,11 @@ module Gmusic
           thead.each { |k, v| column k, width: v, padding: 2 }
         end
 
+        thead.shift
+
         array.each_with_index do |item, index|
           row color: 'green' do
             column (index + 1).to_s
-            thead.shift
             thead.each_key { |method| column item.send(method) }
           end
         end
