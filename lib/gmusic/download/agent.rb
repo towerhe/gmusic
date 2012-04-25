@@ -24,31 +24,39 @@ module Gmusic
           songs.flatten!
           raise InvalidArgument, 'must be a song or an array of songs' if songs.empty?
 
-          urls = songs.map(&:url)
-          tempfiles = get_files(urls, Download.config.concurrency)
-          songs.each { |s| save(s.title, tempfiles[s.url.hash]) }
+          download_files(songs, Download.config.concurrency)
         end
 
         private
 
-        def get_files(urls, concurrency)
-          multi_async_get(urls, concurrency) do |res|
-            # TODO
-            page = Nokogiri::HTML res
-            node = page.search('.download a:last')
-            url = HOST + node.attributes9['href'].value
-            open url
+        def download_files(songs, concurrency)
+          urls = songs.map(&:url)
+          durls = get_download_urls(urls, concurrency)
+          url_hash = Hash[urls.zip(durls.values)]
+          responses = multi_async_get(durls.values, concurrency)
+
+          songs.map do |s|
+            key = url_hash[s.url].hash
+            save s.title, responses[key]
           end
         end
 
-        def save(filename, temfile)
+        def get_download_urls(urls, concurrency)
+          multi_async_get(urls, concurrency) do |res|
+            page = Nokogiri::HTML res
+            node = page.search('.download a:first')
+            url = HOST + node[1].attributes['href'].value
+            #open url
+          end
+        end
+
+        def save(filename, content)
           fname = File.join(DEFAULT_DIRECTORY, filename + '.mp3')
           File.open(fname, 'w+') do |f|
             begin
-              f.write temfile.read
+              f.write tempfile
             ensure
               f.close
-              tempfile.unlink
             end
           end
 

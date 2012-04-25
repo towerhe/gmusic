@@ -21,7 +21,7 @@ module Gmusic
         thead = { id: 10, title: 20, artist: 20, url: 45 }
 
         row color: 'red', bold: true do
-          thead.each { |k, v| column k, width: v, padding: 2 }
+          thead.each { |k, v| column k, width: v, align: 'center' }
         end
 
         thead.shift
