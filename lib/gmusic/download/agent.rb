@@ -17,6 +17,7 @@ module Gmusic
 
       class << self
         def download(*songs)
+          songs.flatten!
           raise InvalidArgument, 'must be a song or an array of songs' if songs.empty?
 
           urls = songs.map(&:url)
