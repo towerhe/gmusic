@@ -54,7 +54,7 @@ module Gmusic
           fname = File.join(DEFAULT_DIRECTORY, filename + '.mp3')
           File.open(fname, 'w+') do |f|
             begin
-              f.write tempfile
+              f.write content
             ensure
               f.close
             end
