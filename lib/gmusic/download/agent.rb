@@ -1,5 +1,7 @@
 #require 'em-http-request'
 require 'confstruct'
+require 'open-uri'
+require 'nokogiri'
 
 module Gmusic
   module Download
@@ -15,6 +17,7 @@ module Gmusic
     class Agent
       extend AsyncRequest
       DEFAULT_DIRECTORY = File.expand_path '~/Downloads'
+      HOST = 'http://www.google.cn'
 
       class << self
         def download(*songs)
@@ -22,19 +25,30 @@ module Gmusic
           raise InvalidArgument, 'must be a song or an array of songs' if songs.empty?
 
           urls = songs.map(&:url)
-          responses = multi_async_get(urls, Download.config.concurrency)
-          songs.each { |s| save(s.title, responses[s.url.hash]) }
+          tempfiles = get_files(urls, Download.config.concurrency)
+          songs.each { |s| save(s.title, tempfiles[s.url.hash]) }
         end
 
         private
 
-        def save(filename, content)
+        def get_files(urls, concurrency)
+          multi_async_get(urls, concurrency) do |res|
+            # TODO
+            page = Nokogiri::HTML res
+            node = page.search('.download a:last')
+            url = HOST + node.attributes9['href'].value
+            open url
+          end
+        end
+
+        def save(filename, temfile)
           fname = File.join(DEFAULT_DIRECTORY, filename + '.mp3')
           File.open(fname, 'w+') do |f|
             begin
-              f.write content
+              f.write temfile.read
             ensure
               f.close
+              tempfile.unlink
             end
           end
 
