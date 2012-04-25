@@ -1,6 +1,6 @@
 require 'thor'
 require 'gmusic/cli/reporter'
-#require 'gmusic'
+require 'gmusic'
 
 module Gmusic
   class CLI < Thor
