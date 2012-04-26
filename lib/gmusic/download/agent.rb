@@ -41,7 +41,7 @@ module Gmusic
         def get_download_url_mapping(urls, concurrency)
           tmp_urls = get_tmp_url_mapping(urls, concurrency)
           interim_mapping = map_urls(urls, tmp_urls)
-          download_urls = multi_async_get(durls.values, concurrency) do |http|
+          download_urls = multi_async_get(tmp_urls.values, concurrency) do |http|
             http.response_header['LOCATION']
           end
 
