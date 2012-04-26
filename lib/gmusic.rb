@@ -4,8 +4,6 @@ module Gmusic
   autoload :Album, 'gmusic/models/album'
   autoload :Link, 'gmusic/models/link'
   autoload :Download, 'gmusic/download/download'
-  autoload :SyncAgent, 'gmusic/download/sync_agent'
-  autoload :AsyncAgent, 'gmusic/download/async_agent'
   autoload :AsyncRequest, 'gmusic/http/async_request'
 
   module Search

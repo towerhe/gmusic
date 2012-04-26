@@ -23,8 +23,8 @@ module Gmusic
         private
 
         def get_files(urls, concurrency)
-          multi_async_get(urls, concurrency) do |res|
-            page = Nokogiri::HTML res
+          multi_async_get(urls, concurrency) do |http|
+            page = Nokogiri::HTML http.response
             node = page.search('.download a:first')
             url = HOST + node[1].attributes['href'].value
             open url
