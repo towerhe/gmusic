@@ -29,8 +29,12 @@ module Gmusic
 
         def download_files(songs, concurrency)
           urls = songs.map(&:url)
-          mapping = get_download_url_mapping(urls, concurrency)
-          responses = multi_async_get(mapping.values, concurrency)
+          tmp = get_download_url_mapping(urls, concurrency)
+          mapping = map_urls(urls, tmp)
+          responses = multi_async_get(mapping.values, concurrency, 1)
+          
+          #mapping = get_download_url_mapping(urls, concurrency)
+          #responses = multi_async_get(mapping.values, concurrency)
 
           songs.map do |s|
             key = mapping[s.url].hash
@@ -38,27 +42,32 @@ module Gmusic
           end
         end
 
-        def get_download_url_mapping(urls, concurrency)
-          tmp_urls = get_tmp_url_mapping(urls, concurrency)
-          interim_mapping = map_urls(urls, tmp_urls)
-          download_urls = multi_async_get(tmp_urls.values, concurrency) do |http|
-            http.response_header['LOCATION']
-          end
+        #def get_download_url_mapping(urls, concurrency)
+          #tmp_urls = get_tmp_url_mapping(urls, concurrency)
+          #interim_mapping = map_urls(urls, tmp_urls)
+          #download_urls = multi_async_get(tmp_urls.values, concurrency) do |http|
+            #http.response_header['LOCATION']
+          #end
 
-          map_urls(interim_mapping, download_urls)
-        end
+          #map_urls(interim_mapping, download_urls)
+        #end
+
+        #def map_urls(keys, values)
+          #if keys.is_a? Array
+            #mapping = keys.map { |i| [i, values[i.hash]] }
+          #else
+            #mapping = keys.map { |k, v| [k, values[v.hash]] }
+          #end
+
+          #Hash[mapping]
+        #end
 
         def map_urls(keys, values)
-          if keys.is_a? Array
-            mapping = keys.map { |i| [i, values[i.hash]] }
-          else
-            mapping = keys.map { |k, v| [k, values[v.hash]] }
-          end
-
+          mapping = keys.map { |i| [i, values[i.hash]] }
           Hash[mapping]
         end
 
-        def get_tmp_url_mapping(urls, concurrency)
+        def get_download_url_mapping(urls, concurrency)
           multi_async_get(urls, concurrency) do |http|
             page = Nokogiri::HTML http.response
             node = page.search('.download a:first')
