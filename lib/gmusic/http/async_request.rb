@@ -1,4 +1,3 @@
-#require 'em-http-request'
 require 'em-synchrony'
 require 'em-synchrony/em-http'
 
@@ -16,7 +15,13 @@ module Gmusic
             results.merge!(url.hash => result)
             iter.next
           end
-          http.errback { iter.next }
+
+          http.errback do
+            # NOTE when downloading multiple songs
+            # it may accidently fall to error callback
+            results.merge!(url.hash => http.response) unless block_given?
+            iter.next
+          end
         end
 
         EventMachine.stop

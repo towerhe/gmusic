@@ -32,8 +32,8 @@ module Gmusic
         albums = collect_albums_from page
         urls = albums.map(&:url)
 
-        songs_in_albums = multi_async_get(urls) do |res|
-          page = Nokogiri::HTML res
+        songs_in_albums = multi_async_get(urls) do |http|
+          page = Nokogiri::HTML http.response
           details = collect_details_from page
           details.map {|detail| Song.new detail }
         end

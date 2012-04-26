@@ -1,6 +1,4 @@
-#require 'em-http-request'
 require 'confstruct'
-require 'open-uri'
 require 'nokogiri'
 
 module Gmusic
@@ -31,22 +29,36 @@ module Gmusic
 
         def download_files(songs, concurrency)
           urls = songs.map(&:url)
-          durls = get_download_urls(urls, concurrency)
-          url_hash = Hash[urls.zip(durls.values)]
-          responses = multi_async_get(durls.values, concurrency)
+          mapping = get_download_url_mapping(urls, concurrency)
+          responses = multi_async_get(mapping.values, concurrency)
 
           songs.map do |s|
-            key = url_hash[s.url].hash
+            key = mapping[s.url].hash
             save s.title, responses[key]
           end
         end
 
-        def get_download_urls(urls, concurrency)
-          multi_async_get(urls, concurrency) do |res|
-            page = Nokogiri::HTML res
+        def get_download_url_mapping(urls, concurrency)
+          tmp_urls = get_tmp_url_mapping(urls, concurrency)
+          interim_mapping = map_urls(urls, tmp_urls)
+          download_urls = multi_async_get(durls.values, concurrency) do |http|
+            http.response_header['LOCATION']
+          end
+
+          map_urls(interim_mapping, download_urls)
+        end
+
+        def map_urls(keys, values)
+          mapping = keys.map { |i| [i, values[i.hash]] }
+          Hash[mapping]
+        end
+
+        def get_tmp_url_mapping(urls, concurrency)
+          multi_async_get(urls, concurrency) do |http|
+            page = Nokogiri::HTML http.response
             node = page.search('.download a:first')
-            url = HOST + node[1].attributes['href'].value
-            #open url
+
+            HOST + node[1].attributes['href'].value
           end
         end
 
@@ -64,35 +76,6 @@ module Gmusic
         end
       end
 
-      #def multi_async_requests(songs, concurrency)
-      #results = []
-      #EM.synchrony do
-      #EM::Synchrony::Iterator.new(songs, concurrency).each do |song, iter|
-      #http = EventMachine::HttpRequest.new(song.link).aget
-      #http.callback { results.push save(song.title, http.response) }
-      #http.errback { iter.next }
-      #end
-      #EventMachine.stop
-      #end
-
-      #results
-      #end
-
-      #private
-
-      #def save(filename, content)
-      #fname = File.join(Gmusic::DEFAULT_DIRECTORY, filename + '.mp3')
-      #File.open(fname, 'w+') do |f|
-      #begin
-      #f.write content
-      #ensure
-      #f.close
-      #end
-      #end
-
-      #fname
-      #end
     end
-
   end
 end
