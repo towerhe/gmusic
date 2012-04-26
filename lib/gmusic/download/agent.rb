@@ -49,7 +49,12 @@ module Gmusic
         end
 
         def map_urls(keys, values)
-          mapping = keys.map { |i| [i, values[i.hash]] }
+          if keys.is_a? Array
+            mapping = keys.map { |i| [i, values[i.hash]] }
+          else
+            mapping = keys.map { |k, v| [k, values[v.hash]] }
+          end
+
           Hash[mapping]
         end
 
