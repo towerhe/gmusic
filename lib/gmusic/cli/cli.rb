@@ -66,7 +66,7 @@ module Gmusic
       ids = ask_for_numbers songs.size
       songs = ids.map {|i| songs[i-1] }
 
-      Download::Agent.download(songs)
+      Download::SyncAgent.download(songs)
     end
 
     def search_song(title)

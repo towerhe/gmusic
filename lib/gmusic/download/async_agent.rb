@@ -1,18 +1,9 @@
-require 'confstruct'
 require 'nokogiri'
 
 module Gmusic
   module Download
 
-    class InvalidArgument < ArgumentError; end
-
-    def self.config
-      @@config ||= ::Confstruct::Configuration.new do
-        concurrency 3
-      end
-    end
-
-    class Agent
+    class AsyncAgent
       extend AsyncRequest
       DEFAULT_DIRECTORY = File.expand_path '~/Downloads'
       HOST = 'http://www.google.cn'
