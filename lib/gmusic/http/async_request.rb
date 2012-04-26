@@ -11,7 +11,7 @@ module Gmusic
         EM::Synchrony::Iterator.new(urls, concurrency).each do |url, iter|
           http = EventMachine::HttpRequest.new(url).aget
           http.callback do
-            result = block_given? ? yield(http.response) : http.response
+            result = block_given? ? yield(http) : http.response
             results.merge!(url.hash => result)
             iter.next
           end
