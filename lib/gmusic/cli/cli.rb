@@ -18,7 +18,7 @@ module Gmusic
 
     desc 'download', 'Download songs or albums'
     method_options %w(title -t) => :string,
-                   %w(album -a) => :string,
+                   %w(album -a) => :boolean,
                    %w(directory -d) => :string
     def download
       Song.download(formatted_title, options[:directory])

@@ -53,8 +53,8 @@ module Gmusic
           #Hash[mapping]
         #end
 
-        def map_urls(keys, values)
-          mapping = keys.map { |i| [i, values[i.hash]] }
+        def map_urls(ary, hash)
+          mapping = ary.map { |i| [i, hash[i.hash]] }
           Hash[mapping]
         end
 
