@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
   s.add_dependency "thor"
   s.add_dependency "command_line_reporter"
   s.add_dependency "mechanize"
-  #s.add_dependency "em-http-request"
+  s.add_dependency "em-http-request"
   s.add_dependency "em-synchrony"
   s.add_dependency "confstruct"
 
