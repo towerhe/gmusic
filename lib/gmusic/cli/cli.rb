@@ -32,8 +32,8 @@ module Gmusic
 
       send(__callee__, limit) unless number
 
-      number = number[0].to_i
-      return number if number <= limit
+      number = number[0].to_i - 1
+      return number if (0..limit).include?(number)
 
       send(__callee__, limit)
     end
@@ -43,7 +43,7 @@ module Gmusic
         Please type one or more numbers in #{(1..limit)}, sperated by comma!
         Type 0 or any non-digit to to download the whole album.
       EOF
-      numbers = answer.strip.split(/\s*,\s*/).map(&:to_i)
+      numbers = answer.strip.split(/\s*,\s*/).map { |i| i.to_i - 1 }
 
       numbers.uniq # non-digit char will be 0 when received :to_i
                    # also restrict duplications
@@ -73,7 +73,7 @@ module Gmusic
       end
 
       songs = reporter.subject
-      id = ask_for_a_number(songs.size) - 1
+      id = ask_for_a_number(songs.size)
 
       songs[id].save
     end
