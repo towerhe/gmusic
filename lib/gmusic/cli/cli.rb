@@ -60,13 +60,11 @@ module Gmusic
 
       albums = reporter.subject
       id = ask_for_a_number(albums.size)
-      songs = albums[id].songs
-      reporter.list songs
+      album = albums[id]
+      reporter.list album.songs
+      ids = ask_for_numbers album.songs.size
 
-      ids = ask_for_numbers songs.size
-      songs = ids.map {|i| songs[i-1] }
-
-      Download::SyncAgent.download(songs)
+      album.download ids
     end
 
     def search_song(title)

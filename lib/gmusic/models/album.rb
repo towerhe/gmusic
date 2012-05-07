@@ -9,6 +9,13 @@ module Gmusic
       @songs = attrs[:songs]
     end
 
+    def download(*ids)
+      ids.flatten!
+      targets = ids.empty? ? songs : ids.map { |i| songs[i] }
+
+      Download::SyncAgent.download targets
+    end
+
     class << self
       def search(opts)
         Search::Engine.instance.search_album(opts) unless opts.empty?
