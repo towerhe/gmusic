@@ -25,7 +25,7 @@ module Gmusic
       %w(directory -d) => :string
     def download
       begin
-        Song.download(formatted_title, options[:directory])
+        Song.download(formatted_title(options[:title]), options[:directory])
       rescue Interrupt
         say 'Cancelled', :red
       end
