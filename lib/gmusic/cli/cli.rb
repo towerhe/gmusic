@@ -73,7 +73,7 @@ module Gmusic
         ids = ask_for_numbers album.songs.size
         result = album.download ids
 
-        result.is_a?(Array) ? prompt(result) : prompt(false, result)
+        result.is_a?(Array) ? prompt(false, result) : prompt(result)
       end
 
       def search_and_download_song(title)

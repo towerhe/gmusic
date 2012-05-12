@@ -84,7 +84,7 @@ module Gmusic
       end
 
       def extract_album_title(str)
-        /《(.+)》/.match(str)[1].strip
+        /《(.+)》/m.match(str)[1].strip
       end
 
       def extract_album_id(str)
