@@ -38,10 +38,7 @@ module Gmusic
           details.map {|detail| Song.new detail }
         end
 
-        albums.each do |a|
-          key = a.url.hash
-          a.songs = songs_in_albums[key]
-        end
+        albums.each { |a| a.songs = songs_in_albums[a.url] }
       end
 
       #NOTE not finish
@@ -49,20 +46,21 @@ module Gmusic
         #TODO
         #`get` should be rescue too
         #maybe pass a song list and then can retry 3 times
+        full_address = "#{mkdir dir}/#{song.title}.mp3"
         agent.pluggable_parser.default = Mechanize::Download
         agent.get(song.url) do |page|
           times = 0
           begin
             file = page.links.last.click
           rescue Errno::ETIMEDOUT => e
-            return false if times > 2
+            return if times > 2
             times += 1
             retry
           end
-          file.save("#{mkdir dir}/#{song.title}.mp3")
+          file.save full_address
         end
 
-        true
+        full_address
       end
 
       private
