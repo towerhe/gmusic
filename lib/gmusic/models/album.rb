@@ -9,6 +9,7 @@ module Gmusic
       @songs = attrs[:songs]
     end
 
+    # Returns the directory or an array of failures' title
     def download(*ids)
       ids.flatten!
       targets = ids.empty? ? songs : ids.map { |i| songs[i] }
