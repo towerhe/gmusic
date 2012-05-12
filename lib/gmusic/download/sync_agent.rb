@@ -16,8 +16,10 @@ module Gmusic
 
           urls = songs.map(&:url)
           tempfiles = get_files(urls, Download.config.concurrency)
+          results = songs.map { |s| save(s.title, tempfiles[s.url]) }
+          failures = results.select {|r| r.is_a? String }
 
-          songs.map { |s| save(s.title, tempfiles[s.url.hash]) }
+          failures.empty? ? DEFAULT_DIRECTORY : failures
         end
 
         private
@@ -36,13 +38,15 @@ module Gmusic
           File.open(fname, 'w+') do |f|
             begin
               f.write tempfile.read
+            rescue
+              return filename
             ensure
               f.close
               tempfile.unlink
             end
           end
 
-          fname
+          true
         end
       end
     end
