@@ -11,9 +11,9 @@ module Gmusic
     def search
       begin
         title = formatted_title options[:title]
-        return search_album(title) if options[:album]
+        return search_and_download_album(title) if options[:album]
 
-        search_song title
+        search_and_download_song title
       rescue Interrupt
         say "Exited", :red
       end
@@ -25,7 +25,8 @@ module Gmusic
       %w(directory -d) => :string
     def download
       begin
-        Song.download(formatted_title(options[:title]), options[:directory])
+        location = Song.download(formatted_title(options[:title]), options[:directory])
+        prompt location, options[:title]
       rescue Interrupt
         say 'Cancelled', :red
       end
@@ -60,7 +61,7 @@ module Gmusic
         str.gsub(/-/, ' ')
       end
 
-      def search_album(title)
+      def search_and_download_album(title)
         reporter = Reporter.decorate do
           Album.search(title: title)
         end
@@ -70,19 +71,29 @@ module Gmusic
         album = albums[id]
         reporter.list album.songs
         ids = ask_for_numbers album.songs.size
+        result = album.download ids
 
-        album.download ids
+        result.is_a?(Array) ? prompt(result) : prompt(false, result)
       end
 
-      def search_song(title)
+      def search_and_download_song(title)
         reporter = Reporter.decorate do
           Song.search_by_title(title)
         end
 
         songs = reporter.subject
         id = ask_for_a_number(songs.size)
+        location = songs[id].save
 
-        songs[id].save
+        prompt location, title
+      end
+
+      def prompt(location, *titles)
+        return say("File saved in #{location}", :green) if location
+
+        titles.flatten.each do |title|
+          say("Failed to download #{title}!", :red)
+        end
       end
     end
 
