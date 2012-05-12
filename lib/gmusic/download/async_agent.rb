@@ -28,7 +28,7 @@ module Gmusic
           #responses = multi_async_get(mapping.values, concurrency)
 
           songs.map do |s|
-            key = mapping[s.url].hash
+            key = mapping[s.url]
             save s.title, responses[key]
           end
         end
@@ -45,16 +45,16 @@ module Gmusic
 
         #def map_urls(keys, values)
           #if keys.is_a? Array
-            #mapping = keys.map { |i| [i, values[i.hash]] }
+            #mapping = keys.map { |i| [i, values[i]] }
           #else
-            #mapping = keys.map { |k, v| [k, values[v.hash]] }
+            #mapping = keys.map { |k, v| [k, values[v]] }
           #end
 
           #Hash[mapping]
         #end
 
         def map_urls(ary, hash)
-          mapping = ary.map { |i| [i, hash[i.hash]] }
+          mapping = ary.map { |i| [i, hash[i]] }
           Hash[mapping]
         end
 
