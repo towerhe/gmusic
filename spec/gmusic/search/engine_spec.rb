@@ -12,12 +12,8 @@ describe Gmusic::Search::Engine do
 
     let(:query) { { title: 'Bad Romance', artist: 'Lady Gaga'} }
 
-    it 'returns a result object' do
-      subject.search(query).should be_a Gmusic::Search::Result
-    end
-
-    it 'search result should contain matches info' do
-      subject.search(query).info.should eq({"歌曲"=>12, "专辑"=>7, "歌手"=>0})
+    it 'returns an array of songs' do
+      subject.search_song(query).first.should be_a Gmusic::Song
     end
   end
 
@@ -60,38 +56,38 @@ describe Gmusic::Search::Engine do
   describe 'private instance methods' do
     let(:agent) { subject.send(:agent) }
 
-    describe '#extract_info_from' do
-      context 'when not found' do
-        before(:each) do
-          prepare_fake_web('not_found.html', not_found_url)
-          @page = agent.get not_found_url
-        end
+    #describe '#extract_info_from' do
+      #context 'when not found' do
+        #before(:each) do
+          #prepare_fake_web('not_found.html', not_found_url)
+          #@page = agent.get not_found_url
+        #end
 
-        it 'raises NotFound' do
-          expect do
-            subject.send(:extract_info_from, @page)
-          end.to raise_error('Gmusic::Search::NotFound')
-        end
-      end
+        #it 'raises NotFound' do
+          #expect do
+            #subject.send(:extract_info_from, @page)
+          #end.to raise_error('Gmusic::Search::NotFound')
+        #end
+      #end
 
-      context 'when found' do
-        before(:each) do
-          prepare_fake_web('search_results.html', found_url)
-          @page = agent.get found_url
-          @info = subject.send(:extract_info_from, @page)
-        end
+      #context 'when found' do
+        #before(:each) do
+          #prepare_fake_web('search_results.html', found_url)
+          #@page = agent.get found_url
+          #@info = subject.send(:extract_info_from, @page)
+        #end
 
-        it 'result info should be a hash' do
-          @info.should be_a Hash
-        end
+        #it 'result info should be a hash' do
+          #@info.should be_a Hash
+        #end
 
-        %W{歌曲 专辑 歌手}.each do |key|
-          it "result info should have key #{key}" do
-            @info.should include key
-          end
-        end
-      end
-    end
+        #%W{歌曲 专辑 歌手}.each do |key|
+          #it "result info should have key #{key}" do
+            #@info.should include key
+          #end
+        #end
+      #end
+    #end
 
     #describe '.collect_links_from' do
       #before(:each) do

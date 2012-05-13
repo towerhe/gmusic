@@ -19,12 +19,10 @@ module Gmusic
     class << self
       def search_by_title(title)
         begin
-          result = Gmusic.search_engine.search(title: title) unless title.empty?
+          Gmusic.search_engine.search_song(title: title) unless title.empty?
         rescue Search::NotFound
           return []
         end
-
-        collect_songs(result)
       end
 
       def download(title, dir = nil)
@@ -32,12 +30,6 @@ module Gmusic
         return false if songs.empty?
 
         songs.first.save(dir)
-      end
-
-      private
-
-      def collect_songs(search_result)
-        search_result.details.map { |detail| Song.new(detail) }
       end
     end
 

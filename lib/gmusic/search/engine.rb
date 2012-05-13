@@ -5,11 +5,17 @@ require 'mechanize'
 
 module Gmusic
   module Search
+    # = Engine
+    #
+    # Search engine as the infrastructure of Gmusic, is powered by Mechanize,
+    # which is used for interacting with Google Music.
     class Engine
       include AsyncRequest
 
-      #NOTE not finish
-      def search(query)
+      ##
+      # Arguments
+      #   query: (Hash)
+      def search_song(query)
         raise InvalidParameter unless query_valid?(query)
 
         query_url = format_url(SEARCH_URL, query)
@@ -17,13 +23,14 @@ module Gmusic
         #TODO should wrapped in begin rescue pair
         # retry or raise, make it more robust
         page = agent.get(query_url)
-
-        info = extract_info_from page
         details = collect_details_from page
 
-        Result.new(info, details)
+        collect_songs_from details
       end
 
+      ##
+      # Arguments
+      #   query: (Hash)
       def search_album(query)
         url = format_album_url(SEARCH_URL, query)
         page = agent.get(url)
@@ -62,6 +69,10 @@ module Gmusic
       end
 
       private
+
+      def collect_songs_from(details)
+        details.map { |detail| Song.new(detail) }
+      end
 
       def collect_albums_from(page)
         names = collect_names_from page
@@ -132,16 +143,16 @@ module Gmusic
       #end
       #end
 
-      def extract_info_from(page)
-        text = extract_text_from(page, '.topheadline')
-        pattern = /\((\d+)\)/
-        figures = text.scan(pattern).flatten.map { |item| item.to_i }
-        mappings = %w{歌曲 专辑 歌手}.zip(figures)
-        info = Hash[mappings]
-        raise NotFound if not_found?(info)
+      #def extract_info_from(page)
+        #text = extract_text_from(page, '.topheadline')
+        #pattern = /\((\d+)\)/
+        #figures = text.scan(pattern).flatten.map { |item| item.to_i }
+        #mappings = %w{歌曲 专辑 歌手}.zip(figures)
+        #info = Hash[mappings]
+        #raise NotFound if not_found?(info)
 
-        info
-      end
+        #info
+      #end
 
       def extract_text_from(scope, element)
         scope.search(element).text
