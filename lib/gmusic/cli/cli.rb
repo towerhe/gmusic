@@ -81,8 +81,8 @@ module Gmusic
 
       def ask_for_numbers(limit)
         answer = ask <<-EOF
-        Please type one or more numbers in #{(1..limit)}, sperated by comma!
-        Type 0 or any non-digit to to download the whole album.
+          Please type one or more numbers in #{(1..limit)}, sperated by comma!
+          Type any non-digit to to download the whole album.
         EOF
         numbers = answer.strip.split(/\s*,\s*/).map { |i| i.to_i - 1 }
 
@@ -104,7 +104,8 @@ module Gmusic
         album = albums[id]
         reporter.list album.songs
         ids = ask_for_numbers album.songs.size
-        result = album.download ids
+        download_all = ids.any? { |id| id == 0 }
+        result = download_all ? album.download : album.download(ids)
 
         result.is_a?(Array) ? prompt(false, result) : prompt(result)
       end
