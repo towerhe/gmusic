@@ -55,6 +55,7 @@ module Gmusic
 
   module AsyncRequest
 
+    ##
     # Make multiple asynchronous get requests
     #
     # Arguments:

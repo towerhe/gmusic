@@ -3,7 +3,20 @@ require 'nokogiri'
 
 module Gmusic
   module Download
-
+    # = SyncAgent
+    #
+    # SyncAgent is the infrastructure of Gmusic.
+    #
+    # == Examples
+    #
+    # song = Song.new(title: 'title', artist: 'artist', url: 'http://example.com')
+    # result = SyncAgent.download(song)
+    #
+    # # download several songs at a time
+    # result = SyncAgent.download [song]
+    #
+    # # it will return a location where the song is saved if successfully downloaded,
+    # # otherwise returns an array of those failures's titles.
     class SyncAgent
       extend AsyncRequest
       DEFAULT_DIRECTORY = File.expand_path '~/Downloads'

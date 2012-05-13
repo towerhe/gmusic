@@ -3,7 +3,39 @@ require 'gmusic/cli/reporter'
 require 'gmusic'
 
 module Gmusic
+  # = CLI
+  # Tht command line interface of Gmusic powered by `thor`
+  #
+  # == Examples
+  #
+  # === Search Songs
+  #
+  # * `gmusic search --title song-name`
+  #
+  # equivalent to
+  #
+  # * `gmusic s -t song-name`
+  #
+  # === Search Albums
+  #
+  # * `gmusic search --album --title album-name`
+  #
+  # equivalent to
+  #
+  # * `gmusic s -a -t album-name`
+  #
+  # === Download songs
+  #
+  # * `gmusic download --title song-name --directory path/to/your/target/directory`
+  #
+  # equivalent to
+  #
+  # * `gmusic d -t song-name -d path/to/your/target/directory`
+  #
+  # Note that default directory is ~/Downloads/gmusic
   class CLI < Thor
+    # `s` is short for `search`,
+    # `d` is short for 'download'
     map 's' => :search, 'd' => :download
 
     desc 'search', 'Search songs or albums'
@@ -32,6 +64,7 @@ module Gmusic
       end
     end
 
+    # :nodoc:
     # The following methods will not be added to task list
     no_tasks do
       def ask_for_a_number(limit)

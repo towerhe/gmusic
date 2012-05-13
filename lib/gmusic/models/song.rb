@@ -1,6 +1,34 @@
 module Gmusic
-  class InvalidAttributesError < StandardError; end
+  class InvalidAttributesError < StandardError; end # :nodoc:
 
+  # = Song Modle
+  #
+  # The song model release you from messing with the infrastructure, the Search and Download modules.
+  # A song contains 3 attributes:
+  # * title
+  # * artist
+  # * url
+  #
+  # == Examples
+  #
+  # # search songs
+  # title = 'my favorite song title'
+  # songs = Song.search_by_title title
+  # favorite = songs.first
+  #
+  # # download it, it will be saved in ~Downloads/gmusic
+  # favorite.save
+  #
+  # # or save in wherever you like
+  # favorite.save(path)
+  #
+  # # download a song directly
+  #
+  # a song named after it's title will be saved in ~Downloads/gmusic
+  # Song.download(title)
+  #
+  # # or specify with a path
+  # Song.download(title, path)
   class Song
     attr_reader :title, :artist, :url
 

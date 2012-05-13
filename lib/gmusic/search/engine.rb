@@ -9,12 +9,44 @@ module Gmusic
     #
     # Search engine as the infrastructure of Gmusic, is powered by Mechanize,
     # which is used for interacting with Google Music.
+    #
+    # == Examples
+    #
+    # === Searching Songs
+    #
+    # engine = Engine.new
+    # songs = engine.search_song(title: 'bad romance', artist: 'Lady Gaga')
+    # # => an array of songs
+    #
+    # === Searching Albums
+    #
+    # albums = engine.search_album(title: 'album title', artist: 'artist name')
+    # # => an array of albums
+    #
+    # === Downloading A Song
+    #
+    # # without specifying a directory,
+    # # the default location to store songs is ~/Downloads/gmusic
+    # song = songs.first
+    # engine.download(song)
+    # # => ~/Downloads/gmusic/songname.mp3
+    #
+    # # with directory specified
+    # dir = '/path/to/save/songs'
+    # engine.download(song, dir)
+    # # => dir + songname.mp3
+
     class Engine
       include AsyncRequest
 
       ##
       # Arguments
       #   query: (Hash)
+      #   valid query options:
+      #     * :title
+      #     * :artist
+      #     * :album
+      #     * :lyric
       def search_song(query)
         raise InvalidParameter unless query_valid?(query)
 
@@ -46,7 +78,9 @@ module Gmusic
         albums.each { |a| a.songs = songs_in_albums[a.url] }
       end
 
-      #NOTE not finish
+      # :stopdoc:
+      # FIXME since search engine is not responsible for downloading songs,
+      # this method should be move to the Download module
       def download(song, dir=nil)
         #TODO
         #`get` should be rescue too
@@ -131,28 +165,6 @@ module Gmusic
           { title: title, artist: artist, url: url }
         end
       end
-
-      #def collect_links_from(page)
-      #page.search('#song_list tbody').map do |tbody|
-      #id = tbody.attributes['id'].text
-      #title = extract_text_from(tbody, '.Title b')
-      #url = DOWNLOAD_URL % id
-
-      ##{ title: title, link: link }
-      #Link.new(title, url)
-      #end
-      #end
-
-      #def extract_info_from(page)
-        #text = extract_text_from(page, '.topheadline')
-        #pattern = /\((\d+)\)/
-        #figures = text.scan(pattern).flatten.map { |item| item.to_i }
-        #mappings = %w{歌曲 专辑 歌手}.zip(figures)
-        #info = Hash[mappings]
-        #raise NotFound if not_found?(info)
-
-        #info
-      #end
 
       def extract_text_from(scope, element)
         scope.search(element).text

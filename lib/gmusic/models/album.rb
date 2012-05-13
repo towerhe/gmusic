@@ -1,4 +1,33 @@
 module Gmusic
+  # = Album Model
+  #
+  # A album have 4 attributes:
+  # * title
+  # * artist
+  # * songs -- A array of Song object
+  # * url
+  #
+  # == Examples
+  #
+  # # search an album
+  # options = { title: 'my favorite album', artist: 'my favorite artist' }
+  # albums = Album.search options
+  # favorite = albums.first
+  # favorite.songs.each_with_index do |song, i|
+  #   puts i, song.title, song.artist
+  # end
+  #
+  # # download one of your favorite songs
+  # song = favorite.songs.first
+  # song.save
+  #
+  # # or download some by passing indexes of the songs you like
+  # favorite.download(1, 2, 3)
+  #
+  # # or download the whole album
+  # favorite.download
+  #
+  # # Songs download will be saved in ~Downloads
   class Album
     attr_accessor :title, :artist, :songs, :url
 
