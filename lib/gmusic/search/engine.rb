@@ -2,12 +2,10 @@
 require 'gmusic/search/errors'
 require 'fileutils'
 require 'mechanize'
-require 'singleton'
 
 module Gmusic
   module Search
-    class Engine < Mechanize
-      include Singleton
+    class Engine
       include AsyncRequest
 
       #NOTE not finish
@@ -152,11 +150,8 @@ module Gmusic
       #TODO
       #set a logger for the agent
       #http://mechanize.rubyforge.org/Mechanize.html
-      #def agent
-      #@agent ||= Mechanize.new
-      #end
       def agent
-        self.class.instance
+        @agent ||= Mechanize.new
       end
 
       def query_valid?(hash)

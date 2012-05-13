@@ -3,7 +3,7 @@ describe Gmusic::Search::Engine do
   let(:base_url) { %Q{http://www.google.cn/music/search?q} }
   let(:found_url) { base_url + 'bad+romance+lady+gaga' }
   let(:not_found_url) { base_url + 'not+found' }
-  subject { Gmusic::Search::Engine.instance }
+  subject { Gmusic::Search::Engine.new }
 
   describe '#search' do
     before(:each) do
