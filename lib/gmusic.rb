@@ -1,8 +1,6 @@
 module Gmusic
   autoload :Song, 'gmusic/models/song'
-  autoload :Artist, 'gmusic/models/artist'
   autoload :Album, 'gmusic/models/album'
-  autoload :Link, 'gmusic/models/link'
   autoload :Download, 'gmusic/download/download'
   autoload :AsyncRequest, 'gmusic/http/async_request'
 
