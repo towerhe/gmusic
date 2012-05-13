@@ -56,54 +56,6 @@ describe Gmusic::Search::Engine do
   describe 'private instance methods' do
     let(:agent) { subject.send(:agent) }
 
-    #describe '#extract_info_from' do
-      #context 'when not found' do
-        #before(:each) do
-          #prepare_fake_web('not_found.html', not_found_url)
-          #@page = agent.get not_found_url
-        #end
-
-        #it 'raises NotFound' do
-          #expect do
-            #subject.send(:extract_info_from, @page)
-          #end.to raise_error('Gmusic::Search::NotFound')
-        #end
-      #end
-
-      #context 'when found' do
-        #before(:each) do
-          #prepare_fake_web('search_results.html', found_url)
-          #@page = agent.get found_url
-          #@info = subject.send(:extract_info_from, @page)
-        #end
-
-        #it 'result info should be a hash' do
-          #@info.should be_a Hash
-        #end
-
-        #%W{歌曲 专辑 歌手}.each do |key|
-          #it "result info should have key #{key}" do
-            #@info.should include key
-          #end
-        #end
-      #end
-    #end
-
-    #describe '.collect_links_from' do
-      #before(:each) do
-        #prepare_fake_web('search_results.html', found_url)
-        #@page = agent.get found_url
-      #end
-
-      #subject { Gmusic::Search::Agent.send(:collect_links_from, @page) }
-
-      #it 'returns an array of links' do
-        #should be_an Array
-      #end
-      #its(:first) { should be_a Gmusic::Link }
-      #it { should have_at_least(1).item }
-    #end
-
     describe '#collect_details_from' do
       before(:each) do
         prepare_fake_web('search_results.html', found_url)
