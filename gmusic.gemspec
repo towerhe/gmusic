@@ -19,18 +19,15 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   # specify any dependencies here; for example:
-  s.add_dependency "thor"
-  s.add_dependency "command_line_reporter"
-  s.add_dependency "mechanize"
-  s.add_dependency "em-http-request"
-  s.add_dependency "em-synchrony"
-  s.add_dependency "confstruct"
+  s.add_dependency "thor", "~>0.14.6"
+  s.add_dependency "command_line_reporter", "3.2.1"
+  s.add_dependency "mechanize", "~>2.4"
+  s.add_dependency "em-http-request", "~>1.0.2"
+  s.add_dependency "em-synchrony", "~>1.0.1"
+  s.add_dependency "confstruct", "~>0.2.2"
 
-  s.add_development_dependency "rspec"
-  s.add_development_dependency "cucumber"
-  s.add_development_dependency "aruba"
-  s.add_development_dependency "pry"
-  s.add_development_dependency "plymouth"
-  s.add_development_dependency "fakeweb"
-  s.add_development_dependency "cane"
+  s.add_development_dependency "rspec", "~>2.8.0"
+  s.add_development_dependency "cucumber", "~>1.1.4"
+  s.add_development_dependency "aruba", "0.4.11"
+  s.add_development_dependency "fakeweb", "1.3.0"
 end
