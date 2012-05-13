@@ -19,7 +19,7 @@ module Gmusic
 
     class << self
       def search(opts)
-        Search::Engine.instance.search_album(opts) unless opts.empty?
+        Gmusic.search_engine.search_album(opts) unless opts.empty?
       end
     end
   end

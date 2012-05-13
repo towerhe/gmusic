@@ -16,4 +16,7 @@ module Gmusic
     SEARCH_OPTSTIONS = [:title, :artist, :album, :lyric]
   end
 
+  def self.search_engine
+    @engine ||= Search::Engine.new
+  end
 end
